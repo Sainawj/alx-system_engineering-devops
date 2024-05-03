@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# Get the PID of the process
+PROCESS_PID=$(pgrep -f "7-highlander")
+
+# Check if the process is running
+if [ -n "$PROCESS_PID" ]; then
+    echo "Killing process 7-highlander..."
+    kill $PROCESS_PID
+    echo "Process 7-highlander killed."
+else
+    echo "Process 7-highlander is not running."
+fi
+

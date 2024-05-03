@@ -1,0 +1,13 @@
+#!/bin/bash
+
+invincible_message() {
+    echo "I am invincible!!!"
+}
+
+trap 'invincible_message' SIGTERM
+
+while true; do
+    echo "To infinity and beyond"
+    sleep 2
+done
+
