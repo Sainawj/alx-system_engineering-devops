@@ -1,2 +1,3 @@
 #!/usr/bin/env bash
+# Display lines containing the "bash" word to get the PID of your Bash process
 ./1-list_your_processes | grep "bash"
