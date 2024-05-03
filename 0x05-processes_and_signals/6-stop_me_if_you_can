@@ -1,2 +1,9 @@
 #!/usr/bin/env bash
-pkill -f beyond
+# Stop the process named "4-to_infinity_and_beyond"
+process_name="4-to_infinity_and_beyond"
+pids=$(pgrep -f "$process_name")
+
+for pid in $pids; do
+    echo "Terminating process $pid"
+    kill -TERM "$pid"
+done
