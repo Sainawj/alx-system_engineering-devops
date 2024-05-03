@@ -1,14 +1,20 @@
-#!/bin/bash
+#!/usr/bin/env bash
+# Function to check if the process is running and kill it
+kill_process() {
+    process_name="7-highlander"
+    pids=$(pgrep -f "$process_name")
+    
+    if [ -n "$pids" ]; then
+        echo "Terminating process $process_name"
+        pkill -f "$process_name"
+    fi
+}
 
-# Get the PID of the process
-PROCESS_PID=$(pgrep -f "7-highlander")
+# Run the process 7-highlander
+./7-highlander &
 
-# Check if the process is running
-if [ -n "$PROCESS_PID" ]; then
-    echo "Killing process 7-highlander..."
-    kill $PROCESS_PID
-    echo "Process 7-highlander killed."
-else
-    echo "Process 7-highlander is not running."
-fi
+# Wait for a while before checking and killing the process
+sleep 5
 
+# Check if the process is running and kill it
+kill_process

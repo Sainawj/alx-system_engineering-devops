@@ -1,5 +1,4 @@
 #!/bin/bash
-
 # Function to handle SIGTERM signal
 sigterm_handler() {
     echo "I hate the kill command"
