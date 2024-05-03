@@ -1,13 +1,12 @@
 #!/bin/bash
-
 # Run the process in the background
 ./4-to_infinity_and_beyond &
 
 # Get the PID of the process
 PID=$!
 
-# Wait for a few seconds
-sleep 5
+# Wait for a second
+sleep 1
 
 # Kill the process
 kill $PID
