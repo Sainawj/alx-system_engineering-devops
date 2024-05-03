@@ -1,13 +1,9 @@
-#!/bin/bash
-# Run the process in the background
-./7-highlander &
+#!/usr/bin/env bash
+# Stop the process named "7-highlander"
+process_name="7-highlander"
+pids=$(pgrep -f "$process_name")
 
-# Get the PID of the process
-PID=$!
-
-# Wait for a few seconds
-sleep 5
-
-# Kill the process
-kill $PID
-
+for pid in $pids; do
+    echo "Terminating process $pid"
+    kill -TERM "$pid"
+done
