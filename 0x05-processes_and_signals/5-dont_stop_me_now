@@ -1,12 +1,13 @@
-#!/bin/bash
-# Run the process in the background
-./4-to_infinity_and_beyond &
+#!/usr/bin/env bash
+# Find the PID of the process named "4-to_infinity_and_beyond"
+PID=$(pgrep -f "4-to_infinity_and_beyond")
 
-# Get the PID of the process
-PID=$!
-
-# Wait for a second
-sleep 1
-
-# Kill the process
-kill $PID
+# Check if the PID is not empty
+if [ -n "$PID" ]; then
+    # If PID is found, kill the process
+    kill "$PID"
+    echo "Process 4-to_infinity_and_beyond (PID: $PID) has been stopped."
+else
+    # If PID is empty, the process is not running
+    echo "Process 4-to_infinity_and_beyond is not running."
+fi
