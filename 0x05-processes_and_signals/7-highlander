@@ -4,10 +4,8 @@ invincible_message() {
     echo "I am invincible!!!"
 }
 
-# Register SIGTERM handler
 trap 'invincible_message' SIGTERM
 
-# Infinite loop
 while true; do
     echo "To infinity and beyond"
     sleep 2
