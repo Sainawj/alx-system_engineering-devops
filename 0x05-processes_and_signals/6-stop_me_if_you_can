@@ -5,5 +5,10 @@ pids=$(pgrep -f "$process_name")
 
 for pid in $pids; do
     echo "Terminating process $pid"
-    kill -TERM "$pid"
+    if ps -p $pid > /dev/null; then
+        pkill -P $pid   
+        kill -TERM $pid 
+    else
+        echo "Process $pid not found."
+    fi
 done
