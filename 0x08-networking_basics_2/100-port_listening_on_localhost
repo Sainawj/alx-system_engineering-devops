@@ -1,0 +1,4 @@
+#!/bin/bash
+# Start listening on port 98
+nc -l 127.0.0.1 98
+
