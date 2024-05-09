@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# Function to check host availability
+check_host() {
+    ping -c 5 "$1"
+}
+
+# Main script
+case $# in
+    0)
+        echo "Usage: $0 {IP_ADDRESS}"
+        ;;
+    1)
+        check_host "$1"
+        ;;
+    *)
+        echo "Usage: $0 {IP_ADDRESS}"
+        ;;
+esac
