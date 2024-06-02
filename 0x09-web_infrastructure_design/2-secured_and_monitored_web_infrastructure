@@ -1,0 +1,49 @@
+Secured and monitored web infrastructure
+image url: https://github.com/Sainawj/alx-system_engineering-devops/blob/master/0x09-web_infrastructure_design/2-secured_and_monitored_web_infrastructure.jpg
+Whiteboard link: https://miro.com/welcomeonboard/WThVa3Y3VkVBdnU1bVR6THdTb0VGV1BudGp6SFc5YUY5SXoySWt5NVBVVWZxUFF2WUR5bnFoWnA1YzRLQ1dhWHwzNDU4NzY0NTkwOTg2NzYxNzYyfDI=?share_link_id=204662538158
+
+Firewalls:
+Purpose: Protect the infrastructure by controlling incoming and outgoing network traffic based on security rules.
+Firewall 1: Protects the load balancer from unauthorized access.
+Firewall 2 & 3: Protect the internal servers, allowing only specific traffic from the load balancer.
+
+Load Balancer (HAProxy):
+Purpose: Distributes incoming traffic across multiple servers to ensure no single server becomes overwhelmed.
+SSL Termination: Offloads SSL decryption from the servers to the load balancer, improving performance.
+
+Servers (Web/App/DB):
+Role: Each server hosts the web server (Nginx), application server, and database (MySQL) to handle requests and store data.
+SSL Certificate: Used to serve encrypted traffic over HTTPS, ensuring data privacy and security during transmission.
+Monitoring Clients: Collects data on server performance and health, sending it to a monitoring service (e.g., Sumologic).
+
+HTTPS:
+Purpose: Encrypts data between the user's browser and the server, protecting it from interception and tampering.
+
+Monitoring:
+Purpose: Tracks server performance, detects issues, and ensures the infrastructure is running smoothly.
+Data Collection: Monitoring clients on each server collect metrics (e.g., CPU usage, memory usage, QPS) and send them to a centralized monitoring service.
+Additional Explanations
+
+Firewalls:
+Role: Protect servers from unauthorized access, preventing potential attacks and data breaches.
+
+HTTPS:
+Role: Encrypts data in transit, ensuring confidentiality and integrity of the data exchanged between users and the website.
+
+Monitoring:
+Role: Provides visibility into server health and performance, allowing for proactive issue detection and resolution.
+Data Collection: Monitoring clients gather metrics and logs, sending them to a centralized service for analysis and alerting.
+
+Monitoring Web Server QPS (Queries Per Second):
+Method: Configure the monitoring client to collect metrics specific to web server requests. This can be done by tracking request logs or using built-in web server metrics.
+Analysis: Use the monitoring service to visualize QPS data, set thresholds, and configure alerts for unusual activity.
+
+Issues with This Infrastructure
+SSL Termination at Load Balancer:
+Issue: SSL termination at the load balancer means traffic between the load balancer and the servers is unencrypted. This can be a security risk if the internal network is compromised.
+
+Single MySQL Server for Writes:
+Issue: Having only one MySQL server capable of accepting writes creates a single point of failure. If this server fails, the entire application becomes unable to handle write operations.
+
+All Servers with Same Components (Web/App/DB):
+Issue: Running web, application, and database services on the same servers can lead to resource contention. High traffic to one service can impact the performance of others, reducing overall system reliability and scalability.
