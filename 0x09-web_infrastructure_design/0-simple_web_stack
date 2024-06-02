@@ -1,1 +1,40 @@
-https://github.com/Sainawj/alx-system_engineering-devops/blob/master/0x09-web_infrastructure_design/0-simple_web_stack.png
+One-Server Web Infrastructure Design for www.foobar.com
+Image link: https://github.com/Sainawj/alx-system_engineering-devops/blob/master/0x09-web_infrastructure_design/0-simple_web_stack.png
+White Board link: 
+
+User Accessing the Website:
+A user types "www.foobar.com" into their web browser.
+The browser sends a request to the DNS server to resolve "www.foobar.com" to an IP address.
+The DNS server responds with the IP address "8.8.8.8".
+The user's browser sends a request to the server at IP address "8.8.8.8".
+
+Server:
+Definition: A server is a powerful computer designed to process requests and deliver data to other computers over a network.
+Role: Hosts the entire web application including the web server, application server, and database.
+
+Domain Name:
+Role: A domain name is a human-readable address used to access a website. It is easier to remember than an IP address.
+DNS Record: The "www" in "www.foobar.com" is a CNAME (Canonical Name) or A (Address) record that maps to the IP address of the server.
+
+Web Server (Nginx):
+Role: Handles incoming HTTP requests from users. It serves static content (like HTML, CSS, JS) and forwards dynamic requests to the application server.
+
+Application Server:
+Role: Runs the application code (e.g., PHP, Python, Ruby) that processes requests and generates dynamic content. It handles the business logic of the application.
+
+Database (MySQL):
+Role: Stores and manages application data. It processes queries from the application server to retrieve or update data.
+
+Communication:
+Protocol: The server communicates with the user's computer using HTTP/HTTPS protocols. HTTPS ensures that data is encrypted during transmission.
+
+Issues with This Infrastructure
+
+Single Point of Failure (SPOF):
+If the single server fails, the entire website becomes unavailable.
+
+Downtime During Maintenance:
+When deploying new code or performing maintenance, the web server may need to be restarted, causing temporary downtime.
+
+Scalability:
+The infrastructure cannot handle high traffic volumes as it is limited to a single server. This can lead to performance degradation or outages under heavy load.
