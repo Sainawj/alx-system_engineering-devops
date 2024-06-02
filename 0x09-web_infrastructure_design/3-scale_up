@@ -1,0 +1,56 @@
+Scale up
+Link to image: https://github.com/Sainawj/alx-system_engineering-devops/blob/master/0x09-web_infrastructure_design/3-scale_up.jpg
+Link to whiteboard: https://miro.com/welcomeonboard/dWpacGZXZjdjMHdiQzFtandkUVF5aUtCWFM1aHBwOFV3bk9oemNDWlE2MkVpTU1QVGhBaWlDUnVJVFBaV3lmVnwzNDU4NzY0NTkwOTg2NzYxNzYyfDI=?share_link_id=856457477962
+
+Explanation 
+Additional Server:
+Purpose: To enhance scalability, reliability, and separation of concerns, we add a new server to handle specific roles.
+Server Roles:
+Web Servers: Handle HTTP/HTTPS requests and serve static content.
+Application Servers: Execute the application logic and generate dynamic content.
+Database Servers: Manage data storage and retrieval.
+
+Load Balancer Cluster (HAProxy x 2):
+Purpose: Distributes incoming traffic across multiple servers to ensure no single server becomes overwhelmed.
+Cluster Configuration: Provides redundancy and failover capabilities to maintain high availability.
+Active-Active Setup: Both load balancers actively handle traffic, improving load distribution and fault tolerance.
+
+Web Servers (Nginx):
+Purpose: Handle incoming HTTP/HTTPS requests and serve static content (e.g., HTML, CSS, JS). Forward dynamic content requests to the application servers.
+SSL Certificates: Ensure encrypted traffic over HTTPS for secure communication.
+
+Application Servers:
+Purpose: Run the application code, process business logic, and generate dynamic content based on user requests.
+Separation of Concerns: Isolating the application logic improves security, performance, and maintainability.
+
+Database Servers (MySQL):
+Purpose: Store and manage application data. Use primary-replica (master-slave) configuration for high availability and load balancing.
+Redundancy: Multiple database servers ensure data availability and fault tolerance.
+
+Monitoring Clients:
+Purpose: Track server performance, detect issues, and ensure infrastructure health.
+Data Collection: Gather metrics (e.g., CPU usage, memory usage, QPS) and send them to a centralized monitoring service for analysis and alerting.
+Additional Elements and Their Roles
+
+Firewalls:
+Purpose: Protect servers from unauthorized access and potential attacks.
+Configuration: Place firewalls in front of load balancers and internal servers to control traffic flow and enhance security.
+
+SSL Certificates:
+Purpose: Encrypt data between the user's browser and the servers to ensure confidentiality and integrity of the data.
+
+Monitoring:
+Purpose: Provides visibility into server health and performance, allowing proactive issue detection and resolution.
+Data Collection: Monitoring clients gather metrics and logs, sending them to a centralized service for analysis and alerting.
+QPS Monitoring: Configure monitoring clients to track the number of queries per second (QPS) on web servers to analyze traffic and performance.
+
+
+Issues with This Infrastructure
+SSL Termination at Load Balancer:
+Issue: SSL termination at the load balancer can leave traffic between the load balancer and backend servers unencrypted. This can be mitigated by using end-to-end encryption.
+
+Single MySQL Server for Writes:
+Issue: If only one MySQL server handles write operations, it creates a single point of failure. Using a primary-replica setup helps distribute write load and ensure availability.
+
+Separation of Concerns:
+Issue: Having separate servers for web, application, and database roles can complicate deployment and maintenance but improves scalability and fault tolerance.
