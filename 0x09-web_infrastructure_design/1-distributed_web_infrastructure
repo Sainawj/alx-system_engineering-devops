@@ -1,0 +1,40 @@
+Distributed Infrastructure
+Image for the Infrastructure: https://github.com/Sainawj/alx-system_engineering-devops/blob/master/0x09-web_infrastructure_design/1-distributed_web_infrastructure.jpg
+Whiteboard link: https://miro.com/welcomeonboard/OTI5TnJhdUYxWHRnWUNBWnNGRVNuMG1PMGVUS29SdGpRWnJvRUtQU29HMGlqdXNFOUY4UHFmZHE2cXp6TThVcHwzNDU4NzY0NTkwOTg2NzYxNzYyfDI=?share_link_id=582007514415
+
+Explanation of Elements
+Load Balancer (HAProxy):
+Purpose: Distributes incoming traffic across multiple servers to ensure no single server becomes overwhelmed.
+Distribution Algorithm: Round Robin (can also use Least Connections or IP Hashing)
+Round Robin: Distributes client requests to backend servers in a sequential order.
+Active-Active vs Active-Passive:
+Active-Active: All servers are actively handling requests. This setup increases availability and resource utilization.
+Active-Passive: One server handles requests while the other(s) stand by. In case the active server fails, a passive server takes over. This setup ensures high availability but may underutilize resources.
+For this setup, we are using an Active-Active setup to maximize resource usage.
+
+Web Server (Nginx):
+Purpose: Handles static content (e.g., HTML, CSS, JS) and forwards dynamic content requests to the application server.
+Role: Serves as a reverse proxy and improves security, performance, and load distribution.
+
+Application Server:
+Purpose: Hosts the application codebase and processes dynamic requests (e.g., PHP, Python, Ruby).
+Role: Handles business logic, processes user requests, and interacts with the database server to retrieve and store data.
+
+Database Server (MySQL):
+Purpose: Stores and manages application data.
+Primary-Replica (Master-Slave) Cluster:
+Primary Node (Master): Handles all write operations (inserts, updates, deletes).
+Replica Node (Slave): Handles read operations and replicates data from the master. Improves read performance and provides data redundancy.
+Difference: The primary node is used for writing data, while the replica node is used for reading data, providing load balancing and data redundancy.
+
+Issues with this Infrastructure
+Single Point of Failure (SPOF):
+Database Server: If the single database server fails, the application will be unable to read or write data. A primary-replica setup can mitigate this by providing redundancy.
+Load Balancer: If the load balancer fails, no traffic will reach the web or application servers. Using multiple load balancers can mitigate this.
+
+Security Issues:
+No Firewall: The infrastructure lacks a firewall, making it vulnerable to attacks. Implementing firewalls can help protect against unauthorized access and attacks.
+No HTTPS: Communication is not encrypted, making it susceptible to man-in-the-middle attacks. Implementing HTTPS ensures data encryption and secure communication.
+
+No Monitoring:
+Lack of Monitoring: Without monitoring, it's challenging to detect issues like server overloads, downtime, or security breaches. Implementing monitoring tools (e.g., Prometheus, Grafana) can help track server health, performance, and security.
