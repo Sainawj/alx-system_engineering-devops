@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+# Push from client a file
+
+# Update package lists
+apt-get update
+
+# Install Nginx web server
+apt-get -y install nginx
+
+# Allow HTTP traffic through the firewall for Nginx
+ufw allow 'Nginx HTTP'
+
+# Create index page
+echo "Hello World!" > /var/www/html/index.nginx-debian.html
+
+# Create custom 404 page
+echo "Ceci n'est pas une page" > /usr/share/nginx/html/custom_404.html
+
+# Configure Nginx for URL redirection and custom 404 page
+sed -i '/listen 80 default_server/a rewrite ^/redirect_me https://www.youtube.com/watch?v=QH2-TGUlwu4 permanent;' /etc/nginx/sites-available/default
+sed -i '/listen 80 default_server/a error_page 404 /custom_404.html;\n location = /custom_404.html {\n     root /usr/share/nginx/html;\n     internal;\n }' /etc/nginx/sites-available/default
+
+# Restart Nginx to apply configuration changes
+service nginx restart
+
