@@ -6,7 +6,7 @@ package { 'nginx':
 # Define content for index.html file
 file { '/var/www/html/index.html':
   ensure  => present,
-  content => 'Holberton School',
+  content => 'Hello World!',
   require => Package['nginx'],
 }
 
