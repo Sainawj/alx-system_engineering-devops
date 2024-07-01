@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# Define the server IP and private key file
+SERVER_IP="54.237.225.209"
+PRIVATE_KEY="~/.ssh/school"
+
+# Connect to the server using ssh with the specified private key
+ssh -i $PRIVATE_KEY ubuntu@$SERVER_IP
