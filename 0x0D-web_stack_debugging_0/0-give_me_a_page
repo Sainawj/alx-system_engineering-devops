@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+# Fix the bug in Apache 2
+
+# Add a new listening port to the Apache ports configuration
+sed -i '/Listen 80/a Listen 0.0.0.0:8080' /etc/apache2/ports.conf
+
+# Add a new virtual host configuration for the new port
+sed -i '/VirtualHost>/a <VirtualHost *:8080>\n    ServerAdmin webmaster@localhost\n    DocumentRoot /var/www/html\n</VirtualHost>' /etc/apache2/sites-available/000-default.conf
+
+# Restart the Apache service to apply changes
+service apache2 restart
