@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Open 80 port
+# Allow 80 port
 rm /etc/nginx/sites-enabled/default
 ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
 service nginx restart
