@@ -1,32 +1,33 @@
 #!/usr/bin/env bash
-# This script provides information about server domains
+# Script to report information about server domains
+# shellcheck disable=SC2086
 
 check_domain() {
-	# awk will use a space as the record separator
-	# List of subdomains separated by spaces
+	# Use space as the record separator for awk
+	# List of subdomains
 	SUBDOMAINS='www lb-01 web-01 web-02'
 
 	if [ -z "$1" ]; then
 		exit
 	fi
-	
-	# If no specific subdomain is given, process all subdomains
+
+	# If no specific subdomain is provided, check all subdomains
 	if [ -z "$2" ]; then
-		echo "$SUBDOMAINS" | awk -v domain="$1"\
-		'BEGIN { RS=" " }
+		echo "$SUBDOMAINS" | awk -v domain="$1" '
+		BEGIN { RS=" " }
 		{
 			split($0, ARR, " ");
 			cmd = "dig " ARR[1] "." domain " | grep -A1 \"ANSWER SECTION:\" | tail -n1";
 			system(cmd);
 			close(cmd);
-		}' | awk\
-		'{
+		}' | awk '
+		{
 			split($0, DOMS, ".");
 			print "The subdomain " DOMS[1] " is a " $4 " record and points to " $5;
 		}'
 	else
-		dig "$2.$1" | grep -A1 "ANSWER SECTION:" | tail -n1 | awk\
-		'{
+		dig "$2.$1" | grep -A1 "ANSWER SECTION:" | tail -n1 | awk '
+		{
 			split($0, DOMS, ".");
 			print "The subdomain " DOMS[1] " is a " $4 " record and points to " $5;
 		}'
