@@ -34,4 +34,3 @@ check_domain() {
 }
 
 check_domain "$1" "$2"
-
