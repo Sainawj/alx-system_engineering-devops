@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 # This script provides information about server domains
-# shellcheck disable=SC2086
 
 check_domain() {
 	# awk will use a space as the record separator
