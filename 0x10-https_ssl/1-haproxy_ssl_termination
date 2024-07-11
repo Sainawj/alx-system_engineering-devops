@@ -1,61 +1,58 @@
 # HAProxy config file for ssl termination on LB side
 global
-    log /dev/log    local0
-    log /dev/log    local1 notice
-    chroot /var/lib/haproxy
-    stats socket /run/haproxy/admin.sock mode 660 level admin expose-fd listeners
-    stats timeout 30s
-    user haproxy
-    group haproxy
-    daemon
+        log /dev/log    local0
+        log /dev/log    local1 notice
+        chroot /var/lib/haproxy
+        stats socket /run/haproxy/admin.sock mode 660 level admin
+        stats timeout 30s
+        user haproxy
+        group haproxy
+        daemon
 
-    # Maximum number of connections
-    maxconn 2048
-    # Set the maximum size of temporary DHE keys that are generated
-    tune.ssl.default-dh-param 2048
+        # Default SSL material locations
+        ca-base /etc/ssl/certs
+        crt-base /etc/ssl/private
 
-    # Locations for default SSL certificates
-    ca-base /etc/ssl/certs
-    crt-base /etc/ssl/private
-
-    # Default SSL ciphers to use on SSL-enabled listening sockets.
-    ssl-default-bind-ciphers ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:RSA+AESGCM:RSA+AES:!aNULL:!MD5:!DSS
-    ssl-default-bind-options no-sslv3
+        # Default ciphers to use on SSL-enabled listening sockets.
+        # For more information, see ciphers(1SSL). This list is from:
+        #  https://hynek.me/articles/hardening-your-web-servers-ssl-ciphers/
+        ssl-default-bind-ciphers ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:ECDH+3DES:DH+3DES:RSA+AESGCM:RSA+AES:RSA+3DES:!aNULL:!MD5:!DSS
+        ssl-default-bind-options no-sslv3
 
 defaults
-    log     global
-    mode    http
-    option  httplog
-    option  dontlognull
-    option  forwardfor
-    option  http-server-close
-    timeout connect 5000
-    timeout client  50000
-    timeout server  50000
-    errorfile 400 /etc/haproxy/errors/400.http
-    errorfile 403 /etc/haproxy/errors/403.http
-    errorfile 408 /etc/haproxy/errors/408.http
-    errorfile 500 /etc/haproxy/errors/500.http
-    errorfile 502 /etc/haproxy/errors/502.http
-    errorfile 503 /etc/haproxy/errors/503.http
-    errorfile 504 /etc/haproxy/errors/504.http
+        log     global
+        mode    http
+        option  httplog
+        option  dontlognull
+        timeout connect 5000
+        timeout client  50000
+        timeout server  50000
+        errorfile 400 /etc/haproxy/errors/400.http
+        errorfile 403 /etc/haproxy/errors/403.http
+        errorfile 408 /etc/haproxy/errors/408.http
+        errorfile 500 /etc/haproxy/errors/500.http
+        errorfile 502 /etc/haproxy/errors/502.http
+        errorfile 503 /etc/haproxy/errors/503.http
+        errorfile 504 /etc/haproxy/errors/504.http
 
-frontend www-http
-    bind *:80
-    reqadd X-Forwarded-Proto:\ http
-    acl letsencrypt-acl path_beg /.well-known/acme-challenge/
-    use_backend le-certbot-backend if letsencrypt-acl
-    default_backend www-backend
+frontend http
+        bind *:80
 
-frontend www-https
-    bind *:443 ssl crt /etc/letsencrypt/live/www.yourdomain.com/fullchain.pem
-    reqadd X-Forwarded-Proto:\ https
-    default_backend www-backend
+        # HAproxy must be listening on port TCP 443 per task 0x10-https_ssl
+        bind *:443 ssl crt /etc/ssl/www.diamondpaws.tech/www.diamondpaws.tech.pem
 
-backend le-certbot-backend
-    server letsencrypt 127.0.0.1:8888
+        # Test URI to see if its a letsencrypt request
+        acl letsencrypt-acl path_beg /.well-known/acme-challenge/
+        use_backend letsencrypt-backend if letsencrypt-acl
 
-backend www-backend
-    balance roundrobin
-    server 496-web-01 35.243.204.105:80 check
-    server 496-web-02 35.190.182.239:80 check
+        default_backend web_servers
+
+backend web_servers
+        balance roundrobin
+        mode http
+        server 2327-web-01 54.234.98.62:80
+        server 2327-web-02 54.88.200.151:80
+
+# LE Backend
+backend letsencrypt-backend
+        server letsencrypt 127.0.0.1:8888
