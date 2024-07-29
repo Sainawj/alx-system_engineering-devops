@@ -6,7 +6,7 @@ import requests
 import sys
 
 if __name__ == "__main__":
-""" Get the employee ID from the command line arguments """
+
     userId = sys.argv[1]
     user = requests.get("https://jsonplaceholder.typicode.com/users/{}"
                         .format(userId))
