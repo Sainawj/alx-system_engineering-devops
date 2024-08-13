@@ -3,6 +3,7 @@
 
 import requests
 
+
 def number_of_subscribers(subreddit):
     """Fetches the number of subscribers for a given subreddit from Reddit API.
 
@@ -16,8 +17,13 @@ def number_of_subscribers(subreddit):
     # Construct the URL to access subreddit information
     url = f"https://www.reddit.com/r/{subreddit}/about.json"
 
-    # Make a request to the Reddit API with a custom User-Agent to avoid rate limiting
-    response = requests.get(url, headers={"User-Agent": "My-User-Agent"}, allow_redirects=False)
+    # Make a request to the Reddit API with a custom User-Agent to avoid
+    # rate limiting
+    response = requests.get(
+        url,
+        headers={"User-Agent": "My-User-Agent"},
+        allow_redirects=False
+    )
     
     # Check if the request was redirected or resulted in an error
     if response.status_code >= 300:
