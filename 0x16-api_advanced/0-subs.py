@@ -24,7 +24,7 @@ def number_of_subscribers(subreddit):
         headers={"User-Agent": "My-User-Agent"},
         allow_redirects=False
     )
-    
+
     # Check if the request was redirected or resulted in an error
     if response.status_code >= 300:
         return 0
