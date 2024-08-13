@@ -1,29 +1,24 @@
 #!/usr/bin/python3
-"""Module for retrieving top 10 hot posts from a subreddit"""
-
+"""Module queries the Reddit API and prints the titles of the first 10 hot posts"""
 
 def top_ten(subreddit):
-	"""Fetches the top 10 hot posts from a given subreddit.
- 
-	Args:
-		subreddit (str): The name of the subreddit.
+    """ Queries the Reddit API and returns the top 10 hot posts
+    of the subreddit"""
     
-	Prints:
-		The titles of the top 10 hot posts from the subreddit. If the subreddit is invalid or an error occurs, prints 'None'.
-	"""
-	import requests
+    # Import the requests library to handle HTTP requests
+    import requests
 
-	# Construct the URL to fetch the top 10 hot posts from the subreddit
-	url = f"https://www.reddit.com/r/{subreddit}/hot.json?limit=10"
+    # Send a GET request to Reddit's API to fetch the top 10 hot posts from the specified subreddit
+    sub_info = requests.get(
+        "https://www.reddit.com/r/{}/hot.json?limit=10".format(subreddit),
+        headers={"User-Agent": "My-User-Agent"},  # Set a custom User-Agent to identify the request
+        allow_redirects=False  # Prevent automatic redirection of the request
+    )
 
-	# Make a request to the Reddit API with a custom User-Agent to avoid rate limiting
-	response = requests.get(url, headers={"User-Agent": "My-User-Agent"}, allow_redirects=False)
- 
-	# Check if the request was redirected or resulted in an error
-	if response.status_code >= 300:
-		print('None')
-	else:
-		# Parse the JSON response and print the titles of the top 10 hot posts
-		posts = response.json().get("data", {}).get("children", [])
-		for post in posts:
-			print(post.get("data", {}).get("title"))
+    # Check if the request resulted in a redirect or error (status code >= 300)
+    if sub_info.status_code >= 300:
+        print('None')  # Print 'None' if there's an error or redirect
+    else:
+        # Parse the JSON response and print the titles of the top 10 hot posts
+        [print(child.get("data").get("title"))
+         for child in sub_info.json().get("data").get("children")]
