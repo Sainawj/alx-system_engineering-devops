@@ -11,7 +11,7 @@ def top_ten(subreddit):
     Returns the top ten posts for a given subreddit.
     """
     # Define the user-agent header
-    user = {'User-Agent': 'linux:0x16.api.advanced:v1.0.0 (by /u/bdov_)'}
+    user = {'User-Agent': 'Google'}
     
     # Construct the URL to fetch top 10 hot posts from Reddit API
     url = 'https://www.reddit.com/r/{}/hot.json?limit=10'.format(subreddit)
