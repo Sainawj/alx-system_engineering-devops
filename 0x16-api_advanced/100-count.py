@@ -7,16 +7,18 @@ import requests
 import re
 from sys import argv
 
+
 def count_words(subreddit, word_list, after=None, count_dict=None):
     """
-    Recursively queries Reddit API to count occurrences of keywords in hot posts.
-    
+    Recursively queries Reddit API to count occurrences
+    of keywords in hot posts.
+
     Args:
         subreddit (str): The name of the subreddit.
         word_list (list): List of keywords to count (case-insensitive).
         after (str): The parameter to get the next set of results.
         count_dict (dict): A dictionary to keep track of keyword counts.
-    
+
     Returns:
         None: Prints the results sorted by count and then alphabetically.
     """
@@ -28,7 +30,7 @@ def count_words(subreddit, word_list, after=None, count_dict=None):
         url += f"&after={after}"
 
     try:
-        response = requests.get(url, headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"}, allow_redirects=False)
+        response = requests.get(url, headers={"User-Agent": "Mozilla/5.0"}, allow_redirects=False)
         if response.status_code != 200:
             print(f"Failed to fetch data: Status code {response.status_code}")
             return
@@ -36,7 +38,7 @@ def count_words(subreddit, word_list, after=None, count_dict=None):
         data = response.json()
         posts = data.get("data", {}).get("children", [])
         after = data.get("data", {}).get("after", None)
-        
+
         if not posts and not after:
             # Print results if no more posts and no "after" token
             sorted_keywords = sorted(
@@ -47,19 +49,21 @@ def count_words(subreddit, word_list, after=None, count_dict=None):
                 if count > 0:
                     print(f"{word}: {count}")
             return
-        
+
         for post in posts:
             title = post.get("data", {}).get("title", "").lower()
             for word in count_dict.keys():
                 # Use regex to count exact word matches
-                count_dict[word] += len(re.findall(r'\b{}\b'.format(re.escape(word)), title))
+                count_dict[word] += len(re.findall(r'\b{}\b'.format
+                                                   (re.escape(word)), title))
 
         # Recursive call with the 'after' parameter
         count_words(subreddit, word_list, after, count_dict)
-        
+
     except requests.RequestException as e:
         print(f"Request Exception: {e}")
         return
+
 
 if __name__ == "__main__":
     if len(argv) < 3:
