@@ -30,7 +30,8 @@ def count_words(subreddit, word_list, after=None, count_dict=None):
         url += f"&after={after}"
 
     try:
-        response = requests.get(url, headers={"User-Agent": "Mozilla/5.0"}, allow_redirects=False)
+        response = requests.get(
+            url, headers={"User-Agent": "Mozilla/5.0"}, allow_redirects=False)
         if response.status_code != 200:
             print(f"Failed to fetch data: Status code {response.status_code}")
             return
