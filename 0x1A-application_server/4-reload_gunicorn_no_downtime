@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# Get the master PID of the Gunicorn process
+GUNICORN_PID=$(pgrep -f "gunicorn" | head -n 1)
+
+# Check if the PID was found
+if [ -z "$GUNICORN_PID" ]; then
+  echo "Gunicorn master process not found!"
+  exit 1
+fi
+
+# Reload Gunicorn gracefully
+kill -HUP "$GUNICORN_PID"
+
+# Confirm the reload was successful
+if [ $? -eq 0 ]; then
+  echo "Gunicorn has been gracefully reloaded."
+else
+  echo "Failed to reload Gunicorn."
+  exit 1
+fi
