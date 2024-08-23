@@ -1,0 +1,39 @@
+server {
+    listen 80 default_server;  # Listen on port 80 for IPv4, set as the default server
+    listen [::]:80 default_server;  # Listen on port 80 for IPv6, set as the default server
+    
+    root /var/www/html;  # Define the root directory for the server
+    index index.html index.htm index.nginx-debian.html;  # Specify the default index files to serve
+    
+    server_name _;  # Use the default server name (underscore indicates any server name)
+    
+    add_header X-Served-By $hostname;  # Add a custom header to indicate the hostname serving the request
+
+    location /hbnb_static {
+        alias /data/web_static/current/;  # Serve static files for /hbnb_static from a specific directory
+    }
+
+    location / {
+        # Try to serve the request as a file first, then as a directory,
+        # if neither is found, return a 404 error.
+        try_files $uri $uri/ =404;
+    }
+
+    location /airbnb-onepage {
+        proxy_pass http://0.0.0.0:5000/airbnb-onepage;  # Forward requests to /airbnb-onepage to a backend service running on port 5000
+    }
+
+    location ~ ^/airbnb-dynamic/number_odd_or_even/([0-9]+)$ {
+        proxy_pass http://0.0.0.0:5001/number_odd_or_even/$1;  # Proxy dynamic requests with a number to a backend service running on port 5001
+    }
+
+    if ($request_filename ~ redirect_me) {
+        rewrite ^ https://th3-gr00t.tk/ permanent;  # Redirect requests containing "redirect_me" to a specified URL with a permanent 301 status
+    }
+
+    error_page 404 /error_404.html;  # Serve a custom 404 error page
+
+    location = /error_404.html {
+        internal;  # Make the custom error page accessible only internally
+    }
+}

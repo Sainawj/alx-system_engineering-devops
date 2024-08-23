@@ -1,0 +1,29 @@
+server {
+    listen 80;
+    listen [::]:80 default_server;  # Listen on port 80 for both IPv4 and IPv6, and set as the default server
+    add_header X-Served-By $hostname;  # Add a custom header to indicate the hostname serving the request
+    root /etc/nginx/html;  # Define the root directory for the server
+    index index.html index.htm;  # Specify the default index files to serve
+
+    location /redirect_me {
+        return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;  # Redirect requests to /redirect_me to a YouTube link with a 301 status
+    }
+
+    root /var/www/html;  # Redefine the root directory (this may override the previous root definition)
+
+    server_name _;  # Use the default server name (underscore indicates any server name)
+
+    location /airbnb-onepage {
+        proxy_pass http://0.0.0.0:5000/airbnb-onepage;  # Forward requests to /airbnb-onepage to a backend service running on port 5000
+    }
+
+    location /hbnb_static {
+        alias /data/web_static/current/;  # Serve static files for /hbnb_static from a specific directory
+    }
+
+    location / {
+        # Try to serve the request as a file first, then as a directory,
+        # if neither is found, return a 404 error.
+        try_files $uri $uri/ =404;
+     }
+}

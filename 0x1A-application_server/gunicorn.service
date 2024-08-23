@@ -1,20 +1,30 @@
 [Unit]
-Description = HBNB Application Service
-After = network.target
+Description=HBNB  # Description of the service
+After=network.target  # Start the service only after the network is up
 
 [Service]
-User = ubuntu
-Group = ubuntu
-WorkingDirectory = /home/ubuntu/AirBnB_clone_v4
-PermissionsStartOnly = true
-PIDFile = /run/hbnb/hbnb.pid
-ExecStartPre = /bin/mkdir -p /run/hbnb
-ExecStartPre = /bin/chown -R ubuntu:ubuntu /run/hbnb
-ExecStart = /usr/bin/env HBNB_MYSQL_USER=hbnb_dev HBNB_MYSQL_PWD=hbnb_dev_pwd HBNB_MYSQL_HOST=localhost HBNB_MYSQL_DB=hbnb_dev_db HBNB_TYPE_STORAGE=db gunicorn -w 3 --access-logfile /tmp/airbnb-access.log --error-logfile /tmp/airbnb-error.log --bind 0.0.0.0:5003 web_dynamic.2-hbnb:app --pid /run/hbnb/hbnb.pid
-ExecReload = /bin/kill -HUP $MAINPID
-ExecStop = /bin/kill -TERM $MAINPID
-ExecStopPost = /bin/rm -rf /run/hbnb
-PrivateTmp = false
+PermissionsStartOnly=true  # Only enforce permissions on start
+PIDFile=/run/hbnb/hbnb.pid  # Path to the PID file to store the process ID
+User=ubuntu  # Run the service as the 'ubuntu' user
+Group=ubuntu  # Run the service as the 'ubuntu' group
+WorkingDirectory=/home/ubuntu/AirBnB_clone_v4  # Set the working directory for the service
+
+ExecStartPre=/bin/mkdir /run/hbnb  # Pre-start command to create the PID directory
+ExecStartPre=/bin/chown -R ubuntu:ubuntu /run/hbnb  # Pre-start command to set ownership of the PID directory
+
+ExecStart=/usr/bin/env HBNB_MYSQL_USER=hbnb_dev \
+HBNB_MYSQL_PWD=hbnb_dev_pwd HBNB_MYSQL_HOST=localhost \
+HBNB_MYSQL_DB=hbnb_dev_db HBNB_TYPE_STORAGE=db \
+gunicorn -w 3 --access-logfile /tmp/airbnb-access.log \
+--error-logfile /tmp/airbnb-error.log \
+--bind 0.0.0.0:5003 web_dynamic.2-hbnb:app \
+--pid /run/hbnb/hbnb.pid  # Command to start the service with environment variables and Gunicorn
+
+ExecReload=/bin/kill -s HUP $MAINPID  # Command to reload the service configuration
+ExecStop=/bin/kill -s TERM $MAINPID  # Command to stop the service
+ExecStopPost=/bin/rm -rf /run/hbnb  # Post-stop command to clean up the PID directory
+
+PrivateTmp=false  # Do not use a private temporary directory for this service
 
 [Install]
-WantedBy = multi-user.target
+WantedBy=multi-user.target  # Ensure the service is started in multi-user mode (standard runlevel)
